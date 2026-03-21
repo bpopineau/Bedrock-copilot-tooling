@@ -9,7 +9,7 @@ You are building two separate artifacts:
 
 This report gives a concise, prioritized road map built on primary sources from **GitHub Copilot documentation** and **Microsoft / Mojang creator documentation**.
 
-The recommended strategy is to anchor the factory repo on the **official Bedrock documentation source repository**  (CC-BY-4.0 + MIT) so the docs are *actually in the factory repo’s dependency graph*, with clear provenance and reproducible extraction. 
+The recommended strategy is to anchor the factory repo on the **official Bedrock documentation source repository** ([MicrosoftDocs/minecraft-creator](https://github.com/MicrosoftDocs/minecraft-creator), CC-BY-4.0 + MIT) so the docs are *actually in the factory repo’s dependency graph*, with clear provenance and reproducible extraction.
 
 The simplest efficient roadmap is to implement a **Minimal Viable Loop**:
 
@@ -240,11 +240,11 @@ bedrock-addon-tooling/                     # generated output repo
 ```
 
 Notes:
-- `.github/copilot-instructions.md` is the supported file name/location for repository-wide instructions.   
-- Path-specific instructions live under `.github/instructions/**/*.instructions.md` and can include an `applyTo` field.   
-- Skills are stored under `.github/skills` and are folders (SKILL.md + resources).   
-- Custom agents are defined as Markdown agent profiles with YAML frontmatter in `.github/agents`.   
-- MCP for Copilot Chat can be shared via `.vscode/mcp.json`.   
+- `.github/copilot-instructions.md` is the supported file name/location for repository-wide instructions.
+- Path-specific instructions live under `.github/instructions/**/*.instructions.md` and can include an `applyTo` field.
+- Skills are stored under `.github/skills` and are folders (SKILL.md + resources).
+- Custom agents are defined as Markdown agent profiles with YAML frontmatter in `.github/agents`.
+- MCP for Copilot Chat can be shared via `.vscode/mcp.json`.
 
 ### Example: product contract snippet
 
@@ -283,18 +283,18 @@ These are the **minimum** components to satisfy your stated scope.
 
 | Component | Lives in | Purpose | Primary sources that justify it |
 |---|---|---|---|
-| Documentation snapshot | Factory | Pin upstream Bedrock docs as a stable input |  repo + licensing  |
-| Doc ingestion | Factory | Update pinned snapshot + record provenance | Same as above; plus governance/trace needs |
-| Extraction schemas | Factory | Validate extracted JSON outputs (prevent silent drift) | Your own requirement; supports CI stability |
-| Version matrix extractor | Factory | Convert official version guidance into `version-matrix.json` | Latest Platform Version Guidance (N-1, per-file minimums)  |
-| Recipe extractor | Factory | Convert doc rules (manifest fields, pack contents) into “recipes” | Pack contents constraints ; manifest reference  |
-| Spec schema (IR for add-on requests) | Product (and mirrored in factory schemas) | A stable intermediate representation so generation is consistent | Aligns with GitHub agent best practice: well-scoped tasks + acceptance criteria  |
-| Recipe engine | Product | Map spec → file tree plan (what files go where) | Pack structure rules: behavior/resource packs are structured folders ; pack contents must be correct types/locations  |
-| Validator | Product | Deterministic correctness checks; use MCTools where possible | MCTools CLI available + validation categories  |
-| Repair engine | Product | Minimal fixes from validator output; auto-fix when available | Example: item type rules include auto-fix capabilities ; manifest validation rule set  |
-| MCP server tools | Product | Tool API layer Copilot calls for validate/repair/package | MCP concept ; coding agent MCP configuration and tools-only constraint  |
-| CLI | Product | Local deterministic entrypoints (`validate`, `repair`, `package`) | MCTools is CLI-friendly and intended for integration  |
-| Skills | Factory and Product | Repeatable workflows that load on-demand | Agent skills definition + repo location  |
+| Documentation snapshot | Factory | Pin upstream Bedrock docs as a stable input | [MicrosoftDocs/minecraft-creator](https://github.com/MicrosoftDocs/minecraft-creator) + repository licenses (CC-BY-4.0, MIT) |
+| Doc ingestion | Factory | Update pinned snapshot + record provenance | [MicrosoftDocs/minecraft-creator](https://github.com/MicrosoftDocs/minecraft-creator) + provenance/governance requirements in this plan |
+| Extraction schemas | Factory | Validate extracted JSON outputs (prevent silent drift) | Internal engineering control for deterministic CI and contract enforcement |
+| Version matrix extractor | Factory | Convert official version guidance into `version-matrix.json` | [Latest Platform Version Guidance](https://learn.microsoft.com/en-us/minecraft/creator/documents/bedrockversioning?view=minecraft-bedrock-stable) |
+| Recipe extractor | Factory | Convert doc rules (manifest fields, pack contents) into “recipes” | [Pack contents](https://learn.microsoft.com/en-us/minecraft/creator/documents/addonpackcontents?view=minecraft-bedrock-stable) + [manifest.json reference](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/addonsreference/examples/addonmanifest?view=minecraft-bedrock-stable) |
+| Spec schema (IR for add-on requests) | Product (and mirrored in factory schemas) | A stable intermediate representation so generation is consistent | [Copilot coding agent best practices](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/assign-tasks-to-copilot) (clear scope + acceptance criteria) |
+| Recipe engine | Product | Map spec → file tree plan (what files go where) | [Behavior packs](https://learn.microsoft.com/en-us/minecraft/creator/documents/behaviorpack?view=minecraft-bedrock-stable) + [Resource packs](https://learn.microsoft.com/en-us/minecraft/creator/documents/resourcepack?view=minecraft-bedrock-stable) + [Pack contents](https://learn.microsoft.com/en-us/minecraft/creator/documents/addonpackcontents?view=minecraft-bedrock-stable) |
+| Validator | Product | Deterministic correctness checks; use MCTools where possible | [MCTools CLI and validation docs](https://learn.microsoft.com/en-us/minecraft/creator/documents/mctools?view=minecraft-bedrock-stable) |
+| Repair engine | Product | Minimal fixes from validator output; auto-fix when available | [MCTools validation rules](https://learn.microsoft.com/en-us/minecraft/creator/documents/mctools?view=minecraft-bedrock-stable) + manifest rule references |
+| MCP server tools | Product | Tool API layer Copilot calls for validate/repair/package | [MCP overview](https://modelcontextprotocol.io/introduction) + [Copilot coding agent MCP support](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/extend-copilot-coding-agent-with-mcp) |
+| CLI | Product | Local deterministic entrypoints (`validate`, `repair`, `package`) | [MCTools CLI](https://learn.microsoft.com/en-us/minecraft/creator/documents/mctools?view=minecraft-bedrock-stable) |
+| Skills | Factory and Product | Repeatable workflows that load on-demand | [Copilot skills](https://docs.github.com/en/copilot/how-tos/configure-custom-instructions/add-repository-instructions#about-skills-for-github-copilot) + `.github/skills` convention |
 
 ### Bedrock-specific anchors you must explicitly model
 

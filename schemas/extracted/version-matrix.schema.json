@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/version-matrix.schema.json",
+  "title": "VersionMatrix",
+  "type": "object",
+  "required": ["source", "generatedAt", "entries"],
+  "properties": {
+    "source": {"type": "string", "minLength": 1},
+    "generatedAt": {"type": "string", "format": "date-time"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["artifactType", "minimumVersion"],
+        "properties": {
+          "artifactType": {"type": "string", "minLength": 1},
+          "minimumVersion": {
+            "type": "array",
+            "items": {"type": "integer", "minimum": 0},
+            "minItems": 3,
+            "maxItems": 4
+          },
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

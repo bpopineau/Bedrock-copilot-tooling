@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.local/schemas/version-matrix.schema.json",
+  "$id": "urn:version-matrix:schema:1",
   "title": "VersionMatrix",
   "type": "object",
-  "required": ["source", "generatedAt", "entries"],
+  "required": ["source", "entries"],
   "properties": {
     "source": {"type": "string", "minLength": 1},
     "generatedAt": {"type": "string", "format": "date-time"},

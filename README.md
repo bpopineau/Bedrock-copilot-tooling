@@ -5,7 +5,7 @@
 [![Workflow](https://img.shields.io/badge/workflow-spec%20%E2%86%92%20plan%20%E2%86%92%20generate%20%E2%86%92%20validate%20%E2%86%92%20repair-orange)](#workflow)
 [![License](https://img.shields.io/badge/license-TBD-lightgrey)](#license)
 
-A **Copilot-centered, documentation-distilled, MCP-powered** tooling system for creating **Minecraft Bedrock add-ons** with stronger reliability, explicit version targeting, deterministic validation, and repair-first workflows.
+A **Copilot-centered, documentation-distilled, skills-enabled, MCP-powered** tooling system for creating **Minecraft Bedrock add-ons** with stronger reliability, explicit version targeting, deterministic validation, and repair-first workflows.
 
 ---
 
@@ -19,6 +19,7 @@ A **Copilot-centered, documentation-distilled, MCP-powered** tooling system for 
 - [Repository layout](#repository-layout)
 - [Quick start](#quick-start)
 - [Documentation strategy](#documentation-strategy)
+- [Skills strategy](#skills-strategy)
 - [Agent model](#agent-model)
 - [MCP toolset](#mcp-toolset)
 - [Validation and repair](#validation-and-repair)
@@ -114,7 +115,10 @@ Use repo-native AI controls for consistency:
 - `.github/copilot-instructions.md`
 - path-specific instruction files
 - reusable prompt files
+- task-specific Copilot skills
 - a custom Bedrock agent profile
+
+Skills provide reusable Bedrock workflows that can bundle instructions, examples, templates, and helper scripts for specialized tasks.
 
 ### 3. Deterministic Bedrock layer
 
@@ -230,6 +234,28 @@ Only package validated outputs.
     create-block.prompt.md
     repair-pack.prompt.md
     upgrade-version.prompt.md
+  skills/
+    create-bedrock-item/
+      SKILL.md
+      examples/
+      templates/
+      scripts/
+    create-bedrock-block/
+      SKILL.md
+      examples/
+      templates/
+      scripts/
+    repair-bedrock-pack/
+      SKILL.md
+      examples/
+      scripts/
+    upgrade-bedrock-version/
+      SKILL.md
+      migration-rules/
+      scripts/
+    package-bedrock-addon/
+      SKILL.md
+      scripts/
   agents/
     bedrock-addon-engineer.agent.md
 
@@ -264,6 +290,34 @@ scripts/
 
 ---
 
+## What goes in each area
+
+### `.github/prompts/`
+
+Focused one-time workflow prompts for scoped tasks.
+
+### `.github/skills/`
+
+Reusable Bedrock workflow capabilities.
+
+Each skill should contain a `SKILL.md` file plus any optional supporting assets needed to perform the task well, such as:
+
+- examples
+- templates
+- helper scripts
+- migration references
+- validation notes
+
+Recommended starter skills:
+
+- `create-bedrock-item`
+- `create-bedrock-block`
+- `repair-bedrock-pack`
+- `upgrade-bedrock-version`
+- `package-bedrock-addon`
+
+---
+
 ## Quick start
 
 ### 1. Create the repo foundation
@@ -292,7 +346,17 @@ Create:
 - reusable prompt files
 - the Bedrock agent profile
 
-### 4. Build the first MCP tools
+### 4. Add initial Copilot skills
+
+Create the first Bedrock skills:
+
+- `.github/skills/create-bedrock-item/SKILL.md`
+- `.github/skills/create-bedrock-block/SKILL.md`
+- `.github/skills/repair-bedrock-pack/SKILL.md`
+- `.github/skills/upgrade-bedrock-version/SKILL.md`
+- `.github/skills/package-bedrock-addon/SKILL.md`
+
+### 5. Build the first MCP tools
 
 Start with:
 
@@ -301,7 +365,7 @@ Start with:
 - validation
 - validation report parsing
 
-### 5. Wire the workflow
+### 6. Wire the workflow
 
 Implement the pipeline:
 
@@ -368,6 +432,33 @@ Small trusted canonical examples that reflect preferred patterns.
 #### `examples/vanilla/`
 
 Curated official-style examples used for grounding.
+
+---
+
+## Skills strategy
+
+This project uses **Copilot skills** for repeatable, Bedrock-specific workflows.
+
+Skills are the right place for tasks that need more than a one-off prompt, such as:
+
+- creating a custom item
+- creating a custom block
+- repairing a broken pack
+- upgrading a pack to the current version policy
+- packaging a validated add-on
+
+In this repository:
+
+- **Custom instructions** define always-on Bedrock rules and standards
+- **Prompt files** handle focused one-time workflows
+- **Skills** package reusable Bedrock capabilities with instructions, examples, templates, and scripts
+- **MCP tools** provide deterministic live actions such as validation, lookup, repair support, and packaging
+
+Each skill should live in its own directory and include a `SKILL.md` file. Supporting resources such as examples, templates, markdown references, and scripts should live alongside it.
+
+> Skills are used for repeatable Bedrock workflows. Repository-wide and path-specific instructions remain the always-on rules. Prompt files remain useful for focused one-time tasks.
+
+If you use skills in this repo, verify support in your editor and Copilot surface first, since skills availability can vary by environment and feature set.
 
 ---
 
@@ -538,6 +629,11 @@ Avoid broad rewrites when only a targeted fix is needed.
 - [ ] Create `.github/prompts/create-block.prompt.md`
 - [ ] Create `.github/prompts/repair-pack.prompt.md`
 - [ ] Create `.github/prompts/upgrade-version.prompt.md`
+- [ ] Create `.github/skills/create-bedrock-item/SKILL.md`
+- [ ] Create `.github/skills/create-bedrock-block/SKILL.md`
+- [ ] Create `.github/skills/repair-bedrock-pack/SKILL.md`
+- [ ] Create `.github/skills/upgrade-bedrock-version/SKILL.md`
+- [ ] Create `.github/skills/package-bedrock-addon/SKILL.md`
 - [ ] Create `.github/agents/bedrock-addon-engineer.agent.md`
 
 ### Phase 3 â MCP tools
@@ -661,4 +757,4 @@ This repository is a **Bedrock add-on compiler/copilot system**, not a prompt ex
 
 The baseline architecture is:
 
-> **Copilot-centered, documentation-distilled, MCP-powered, validator-backed, repair-gated Bedrock add-on tooling**
+> **Copilot-centered, documentation-distilled, skills-enabled, MCP-powered, validator-backed, repair-gated Bedrock add-on tooling**

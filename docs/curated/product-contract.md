@@ -2,6 +2,8 @@
 
 ## Required directories
 
+The generator must produce a product repository containing the following paths (some may be created from templates and others may be generated during assembly):
+
 - `.github/copilot-instructions.md`
 - `.github/instructions/`
 - `.github/skills/`

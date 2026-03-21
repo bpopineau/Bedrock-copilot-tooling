@@ -2,10 +2,12 @@
 
 ## Executive summary
 
+A **Copilot-centered, documentation-distilled, skills-enabled, MCP-powered** tooling system for creating **Minecraft Bedrock add-ons** with stronger reliability, explicit version targeting, deterministic validation, and repair-first workflows.
+
 You are building two separate artifacts:
 
 - A **factory repo** (authoring + automation): uses **GitHub Copilot** to maintain a pinned snapshot of **Minecraft Bedrock creator documentation**, extract machine-readable rules, generate the **product repo**, test it, and publish it.
-- A **product repo** (end-user workspace): the generated, Copilot-customized repo in which **GitHub Copilot** can reliably create add-ons using repo instructions, skills, agents, and deterministic MCP tools.
+- A **product repo** (end-user workspace): the generated, Copilot-customized repo in which **GitHub Copilot** can reliably create add-ons using custom instructions, prompt files, skills, and agent profiles with deterministic MCP tools.
 
 This report gives a concise, prioritized road map built on primary sources from **GitHub Copilot documentation** and **Microsoft / Mojang creator documentation**.
 
@@ -16,6 +18,17 @@ The simplest efficient roadmap is to implement a **Minimal Viable Loop**:
 **snapshot → extract → generate → test → publish**
 
 …and make it the only “happy path” in CI until you expand scope. This mirrors GitHub’s guidance that agents perform better with clear scope and acceptance criteria, and when they can build/test/validate changes. 
+
+## Table of contents
+
+- [Goals, assumptions, and minimal viable loop](#goals-assumptions-and-minimal-viable-loop)
+- [Factory and product repo architecture](#factory-and-product-repo-architecture)
+- [Documentation strategy](#documentation-strategy)
+- [Skills strategy](#skills-strategy)
+- [Agent model](#agent-model)
+- [Roadmap and first tasks](#roadmap-and-first-tasks)
+- [Copilot configuration and governance](#copilot-configuration-and-governance)
+- [Testing, provenance, CI, and release](#testing-provenance-ci-and-release)
 
 ## Goals, assumptions, and minimal viable loop
 
@@ -78,6 +91,37 @@ This is the smallest end-to-end loop that proves the factory:
    - Publish the generated product repo (method unspecified): push to a second repo, produce an artifact, or update a template repo.
 
 This loop should be runnable locally and in CI, and it should be the acceptance gate for every PR in the factory repo.
+
+## Documentation strategy
+
+This project treats official Bedrock documentation snapshots as the canonical source for extraction, version policy, and generated repository behavior.
+
+## Skills strategy
+
+This project uses **Copilot skills** for repeatable, Bedrock-specific workflows.
+
+Skills are the right place for tasks that need more than a one-off prompt, such as:
+
+- creating a custom item
+- creating a custom block
+- repairing a broken pack
+- upgrading a pack to the current version policy
+- packaging a validated add-on
+
+In this repository:
+
+- **Custom instructions** define always-on Bedrock rules and standards
+- **Prompt files** handle focused one-time workflows
+- **Skills** package reusable Bedrock capabilities with instructions, examples, templates, and scripts
+- **MCP tools** provide deterministic live actions such as validation, lookup, repair support, and packaging
+
+Each skill should live in its own directory and include a `SKILL.md` file. Supporting resources such as examples, templates, markdown references, and scripts should live alongside it.
+
+> Skills are used for repeatable Bedrock workflows. Repository-wide and path-specific instructions remain the always-on rules. Prompt files remain useful for focused one-time tasks.
+
+## Agent model
+
+Agents orchestrate multi-step workflows across instructions, prompts, skills, and MCP-backed deterministic tools.
 
 ## Factory and product repo architecture
 
@@ -193,27 +237,35 @@ bedrock-addon-tooling/                     # generated output repo
       blocks.instructions.md
       entities.instructions.md
       scripts.instructions.md
+    prompts/
+      create-item.prompt.md
+      create-block.prompt.md
+      repair-pack.prompt.md
+      upgrade-version.prompt.md
+    skills/
+      create-bedrock-item/
+        SKILL.md
+        examples/
+        templates/
+        scripts/
+      create-bedrock-block/
+        SKILL.md
+        examples/
+        templates/
+        scripts/
+      repair-bedrock-pack/
+        SKILL.md
+        examples/
+        scripts/
+      upgrade-bedrock-version/
+        SKILL.md
+        migration-rules/
+        scripts/
+      package-bedrock-addon/
+        SKILL.md
+        scripts/
     agents/
       bedrock-addon-engineer.agent.md
-    skills/
-      create-item/
-        SKILL.md
-        templates/
-        examples/
-      create-block/
-        SKILL.md
-        templates/
-        examples/
-      repair-pack/
-        SKILL.md
-        examples/
-      upgrade-pack/
-        SKILL.md
-      package-addon/
-        SKILL.md
-    prompts/                               # optional (preview feature)
-      create-item.prompt.md
-      repair-pack.prompt.md
 
   .vscode/
     mcp.json                               # optional, for Copilot Chat MCP sharing
@@ -355,6 +407,33 @@ To prevent Copilot from “guessing,” extracted rules must cover these first:
 }
 ```
 
+## Quick start
+
+### 1. Create the repository skeleton
+Create the factory and generated product structure shown in this document.
+
+### 2. Add documentation ingestion and extraction
+Pin upstream docs and produce a deterministic `version-matrix.json`.
+
+### 3. Add AI control surfaces
+Create repository instructions, path-specific instructions, and an initial agent profile.
+
+### 4. Add initial Copilot skills
+
+Create the first Bedrock skills:
+
+- `.github/skills/create-bedrock-item/SKILL.md`
+- `.github/skills/create-bedrock-block/SKILL.md`
+- `.github/skills/repair-bedrock-pack/SKILL.md`
+- `.github/skills/upgrade-bedrock-version/SKILL.md`
+- `.github/skills/package-bedrock-addon/SKILL.md`
+
+### 5. Wire MCP tools and validation
+Connect deterministic validation/repair/package actions through MCP tools.
+
+### 6. Run the workflow
+Run snapshot -> extract -> generate -> test -> publish as the default loop.
+
 ## Roadmap and first tasks
 
 ### Implementation phases (prioritized)
@@ -373,6 +452,14 @@ To prevent Copilot from “guessing,” extracted rules must cover these first:
 
 **Phase: Scale and harden**
 - Add eval scenarios, metrics, governance hooks, and a scheduled upstream update workflow.
+
+### Phase 2 — Copilot control checklist
+
+- [ ] Create `.github/skills/create-bedrock-item/SKILL.md`
+- [ ] Create `.github/skills/create-bedrock-block/SKILL.md`
+- [ ] Create `.github/skills/repair-bedrock-pack/SKILL.md`
+- [ ] Create `.github/skills/upgrade-bedrock-version/SKILL.md`
+- [ ] Create `.github/skills/package-bedrock-addon/SKILL.md`
 
 ### Mermaid timeline (illustrative)
 
@@ -434,6 +521,26 @@ These are the first moves that let Copilot start doing real work immediately. Th
 
 **Skills**
 - Store skills under `.github/skills/` (SKILL.md + resources). 
+
+### `.github/skills/`
+
+Reusable Bedrock workflow capabilities.
+
+Each skill should contain a `SKILL.md` file plus any optional supporting assets needed to perform the task well, such as:
+
+- examples
+- templates
+- helper scripts
+- migration references
+- validation notes
+
+Recommended starter skills:
+
+- `create-bedrock-item`
+- `create-bedrock-block`
+- `repair-bedrock-pack`
+- `upgrade-bedrock-version`
+- `package-bedrock-addon`
 
 ### Factory Engineer agent design
 
@@ -621,3 +728,10 @@ This plan aims for **Copilot-assisted authoring with automation for generation/t
 | Best fit here | Strong default: fastest path to reliable tool-building and add-on creation | Long-term optional: if offline/cost/privacy requirements dominate |
 
 Given your objective—tooling for Bedrock add-ons grounded in official docs—the highest-leverage path is to use hosted Copilot + deterministic MCTools validation, and only revisit local multi-agent after you have stable evals and a failure corpus.
+
+
+## Final architecture statement
+
+> **Copilot-centered, documentation-distilled, skills-enabled, MCP-powered, validator-backed, repair-gated Bedrock add-on tooling**
+
+Implementation caveat: skills support can vary by Copilot surface (editor, IDE, CLI, and agent mode), so verify environment support before making skills mandatory for all contributors.

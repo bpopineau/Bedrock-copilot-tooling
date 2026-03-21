@@ -1,0 +1,11 @@
+{
+  "sources": [
+    {
+      "id": "minecraft-creator-docs",
+      "repo": "https://github.com/MicrosoftDocs/minecraft-creator",
+      "commit": "UNPINNED",
+      "paths": [],
+      "notes": "Set commit hash when vendor snapshot is pinned."
+    }
+  ]
+}

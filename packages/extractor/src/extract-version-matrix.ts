@@ -150,6 +150,10 @@ function extractFromLooseLines(sourceText: string): VersionMatrixEntry[] {
 }
 
 export function extractVersionMatrix(source: string): VersionMatrix {
+  if (source.trim().length === 0) {
+    throw new Error(MISSING_SOURCE_ERROR);
+  }
+
   const tableEntries = extractFromMarkdownTable(source);
   const entries = tableEntries.length > 0 ? tableEntries : extractFromLooseLines(source);
 

@@ -4,8 +4,10 @@
       "id": "minecraft-creator-docs",
       "repo": "https://github.com/MicrosoftDocs/minecraft-creator",
       "commit": "UNPINNED",
-      "paths": [],
-      "notes": "Set commit hash when vendor snapshot is pinned. `generatedAt` is intentionally omitted from extracted outputs until a deterministic provenance-derived value is defined."
+      "paths": [
+        "creator/Documents/BedrockVersioning.md"
+      ],
+      "notes": "Version matrix extraction reads table/list content from Bedrock version guidance and intentionally omits generatedAt for deterministic outputs until commit pinning is finalized."
     }
   ]
 }

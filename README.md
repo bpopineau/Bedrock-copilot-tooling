@@ -21,3 +21,7 @@ The default workflow is:
 ## Current status
 
 This scaffold includes initial Copilot control surfaces, starter skills, schemas, and placeholders for extractors/generators.
+## Extraction prerequisite
+
+The version-matrix extractor requires a pinned upstream snapshot at `vendor/minecraft-creator-docs` (specifically `creator/Documents/BedrockVersioning.md`). Until that snapshot is pinned, extraction should fail fast instead of silently producing empty entries.
+

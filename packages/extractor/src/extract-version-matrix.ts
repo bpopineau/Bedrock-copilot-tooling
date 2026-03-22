@@ -10,6 +10,9 @@ export type VersionMatrix = {
   entries: VersionMatrixEntry[];
 };
 
+const MISSING_SOURCE_ERROR =
+  "Unable to extract version matrix entries. Pin and provide BedrockVersioning.md from vendor/minecraft-creator-docs before running extraction.";
+
 function normalizeText(value: string): string {
   return value.replace(/\r\n?/g, "\n");
 }
@@ -149,6 +152,10 @@ function extractFromLooseLines(sourceText: string): VersionMatrixEntry[] {
 export function extractVersionMatrix(source: string): VersionMatrix {
   const tableEntries = extractFromMarkdownTable(source);
   const entries = tableEntries.length > 0 ? tableEntries : extractFromLooseLines(source);
+
+  if (entries.length === 0) {
+    throw new Error(MISSING_SOURCE_ERROR);
+  }
 
   return {
     source,

@@ -48,3 +48,10 @@ test("extractVersionMatrix falls back to bullet lines", () => {
     }
   ]);
 });
+
+test("extractVersionMatrix fails fast when Bedrock docs are not present", () => {
+  assert.throws(
+    () => extractVersionMatrix(""),
+    /Pin and provide BedrockVersioning\.md from vendor\/minecraft-creator-docs/
+  );
+});

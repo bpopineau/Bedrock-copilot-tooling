@@ -55,3 +55,10 @@ test("extractVersionMatrix fails fast when Bedrock docs are not present", () => 
     /Pin and provide BedrockVersioning\.md from vendor\/minecraft-creator-docs/
   );
 });
+
+test("extractVersionMatrix fails fast for invalid non-empty source", () => {
+  assert.throws(
+    () => extractVersionMatrix("This snapshot has no parseable version matrix entries."),
+    /Pin and provide BedrockVersioning\.md from vendor\/minecraft-creator-docs/
+  );
+});
